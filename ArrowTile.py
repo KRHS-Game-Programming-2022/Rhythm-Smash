@@ -11,6 +11,7 @@ class ArrowTile():
         self.rad = (self.rect.height/2 + self.rect.width/2)/2
         self.rect = self.rect.move(startPos)
         self.living = True
+        self.available = True
 
 
     def move(self):
@@ -22,6 +23,7 @@ class ArrowTile():
         height = size[1]
         if self.rect.bottom > height:
             self.living = False
+            self.available = False
         
             
     def ballCollide(self, other) :

@@ -1,6 +1,7 @@
 import pygame, sys, math, random
 from ArrowTile import *
 from ArrowBox import *
+from HUD import*
 
 pygame.init()
     
@@ -8,7 +9,13 @@ clock = pygame.time.Clock()
     
 size = [900, 700]
 screen = pygame.display.set_mode(size)
-score = 0
+score = HUD("Score: ", size,  [0,0])
+multiplier = HUD("Multiplier: ", size,  [0,30])
+streak = HUD("Streak: ", size,  [0,60])
+
+points = 0
+multiply = 1
+continuous = 0
 
 arrows = []
 arrowBoxes = {"left": ArrowBox("left", [75, 550]),
@@ -52,20 +59,44 @@ while True:
         for box in arrowBoxes.values():
             if box.kind == arrow.kind and box.active:
                 if box.getDist(arrow) < 200:
-                    score += box.getDist(arrow)
+                    points += box.getDist(arrow)*int(multiply)
+                    continuous += 1
                     arrow.living = False
+                    if continuous == 10:
+                        multiply += 1
+                    if continuous == 25:
+                        multiply += 1
+                    if continuous == 40:
+                        multiply += 1
+                    if continuous == 70:
+                        multiply += 1
+                    if continuous == 100:
+                        multiply = 10
+                elif box.getDist(arrow) > 200:
+                    continuous = 0
+                    multiply = 1
+
                 box.active = False
 
+    score.update(points)
+    multiplier.update(multiply)
+    streak.update(continuous)
 
     for arrow in arrows:
         if not arrow.living:
             arrows.remove(arrow)
+        if not arrow.available:
+            continuous = 0
+            multiply = 1
         
     screen.fill((255, 128, 64))
     for box in arrowBoxes.values():
         screen.blit(box.image, box.rect)
     for arrow in arrows:
         screen.blit(arrow.image, arrow.rect)
+    screen.blit(score.image, score.rect)
+    screen.blit(multiplier.image, multiplier.rect)
+    screen.blit(streak.image, streak.rect)
 
 
     pygame.display.flip()   
