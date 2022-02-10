@@ -2,6 +2,9 @@ import pygame, sys, math, random
 from ArrowTile import *
 from ArrowBox import *
 from HUD import*
+from LevelLoader import*
+
+
 
 pygame.init()
     
@@ -17,10 +20,10 @@ points = 0
 multiply = 1
 continuous = 0
 
-arrows = []
+arrows = loadLevel("example.lvl")
 arrowBoxes = {"left": ArrowBox("left", [75, 550]),
-              "up": ArrowBox("up", [150, 550]),
-              "down": ArrowBox("down", [225, 550]),
+              "down": ArrowBox("down", [150, 550]),
+              "up": ArrowBox("up", [225, 550]),
               "right": ArrowBox("right", [300, 550])}
 
 while True:
@@ -28,13 +31,13 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_h:
                 arrowBoxes["left"].active = True
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
                 arrowBoxes["right"].active = True
-            elif event.key == pygame.K_UP:
+            elif event.key == pygame.K_UP or event.key == pygame.K_k:
                 arrowBoxes["up"].active = True
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_j:
                 arrowBoxes["down"].active = True
 
         elif event.type == pygame.KEYUP:
@@ -46,12 +49,13 @@ while True:
                 arrowBoxes["up"].active = False
             elif event.key == pygame.K_DOWN:
                 arrowBoxes["down"].active = False
-
+    """
     if random.randint(0, 60) == 0:
         kinds = ["left", "down", "up", "right"]
         val = random.randint(0,3)
         arrows += [ArrowTile(kinds[int(val)], [0,5], [int(val)*75+75, -100])]
         #print(len(arrows))
+    """
 
     for arrow in arrows:
         arrow.move()
