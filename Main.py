@@ -63,7 +63,7 @@ while True:
         for box in arrowBoxes.values():
             if box.kind == arrow.kind and box.active:
                 if box.getDist(arrow) < 200:
-                    points += box.getDist(arrow)*int(multiply)
+                    points += 200-(box.getDist(arrow)*int(multiply))
                     continuous += 1
                     arrow.living = False
                     if continuous == 10:
