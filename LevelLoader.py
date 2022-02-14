@@ -7,9 +7,10 @@ def loadLevel(lev):
     f.close()
 
     bpm = int(lines[0])
+    difficulty = float(lines[1])
     lines.remove(lines[0])
     bps = bpm/60
-    pps = bps * 1
+    pps = bps * difficulty
 
     size = 50
     speed = [0,pps]
