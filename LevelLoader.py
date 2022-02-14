@@ -1,17 +1,18 @@
 from ArrowTile import*
 from ArrowBox import*
 
-#Will be fixed later; just basic code to read a file
-
 def loadLevel(lev):
     f = open(lev, 'r')
     lines = f.readlines()
     f.close()
 
-
+    bpm = int(lines[0])
+    lines.remove(lines[0])
+    bps = bpm/60
+    pps = bps * 1
 
     size = 50
-    speed = [0,2]
+    speed = [0,pps]
     arrows = []
     offset = size/2
 
