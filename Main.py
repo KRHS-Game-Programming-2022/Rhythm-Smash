@@ -119,7 +119,7 @@ while True:
                 continuous = 0
                 multiply = 1
 
-        screen.fill((255, 128, 64))
+        screen.fill((64, 64, 64))
         for box in arrowBoxes.values():
             screen.blit(box.image, box.rect)
         for arrow in arrows:
