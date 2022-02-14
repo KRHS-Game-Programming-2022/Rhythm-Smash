@@ -1,6 +1,10 @@
 import pygame, sys, math, random
 from ArrowTile import *
 from ArrowBox import *
+from HUD import*
+from LevelLoader import*
+
+
 
 pygame.init()
     
@@ -8,12 +12,18 @@ clock = pygame.time.Clock()
     
 size = [900, 700]
 screen = pygame.display.set_mode(size)
-score = 0
+score = HUD("Score: ", size,  [0,0])
+multiplier = HUD("Multiplier: ", size,  [0,30])
+streak = HUD("Streak: ", size,  [0,60])
 
-arrows = []
+points = 0
+multiply = 1
+continuous = 0
+
+arrows = loadLevel("example.lvl")
 arrowBoxes = {"left": ArrowBox("left", [75, 550]),
-              "up": ArrowBox("up", [150, 550]),
-              "down": ArrowBox("down", [225, 550]),
+              "down": ArrowBox("down", [150, 550]),
+              "up": ArrowBox("up", [225, 550]),
               "right": ArrowBox("right", [300, 550])}
 
 while True:
@@ -21,13 +31,13 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_h:
                 arrowBoxes["left"].active = True
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
                 arrowBoxes["right"].active = True
-            elif event.key == pygame.K_UP:
+            elif event.key == pygame.K_UP or event.key == pygame.K_k:
                 arrowBoxes["up"].active = True
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_j:
                 arrowBoxes["down"].active = True
 
         elif event.type == pygame.KEYUP:
@@ -39,12 +49,13 @@ while True:
                 arrowBoxes["up"].active = False
             elif event.key == pygame.K_DOWN:
                 arrowBoxes["down"].active = False
-
+    """
     if random.randint(0, 60) == 0:
         kinds = ["left", "down", "up", "right"]
         val = random.randint(0,3)
         arrows += [ArrowTile(kinds[int(val)], [0,5], [int(val)*75+75, -100])]
         #print(len(arrows))
+    """
 
     for arrow in arrows:
         arrow.move()
@@ -52,20 +63,44 @@ while True:
         for box in arrowBoxes.values():
             if box.kind == arrow.kind and box.active:
                 if box.getDist(arrow) < 200:
-                    score += box.getDist(arrow)
+                    points += 200-(box.getDist(arrow)*int(multiply))
+                    continuous += 1
                     arrow.living = False
+                    if continuous == 10:
+                        multiply += 1
+                    if continuous == 25:
+                        multiply += 1
+                    if continuous == 40:
+                        multiply += 1
+                    if continuous == 70:
+                        multiply += 1
+                    if continuous == 100:
+                        multiply = 10
+                elif box.getDist(arrow) > 200:
+                    continuous = 0
+                    multiply = 1
+
                 box.active = False
 
+    score.update(points)
+    multiplier.update(multiply)
+    streak.update(continuous)
 
     for arrow in arrows:
         if not arrow.living:
             arrows.remove(arrow)
+        if not arrow.available:
+            continuous = 0
+            multiply = 1
         
     screen.fill((255, 128, 64))
     for box in arrowBoxes.values():
         screen.blit(box.image, box.rect)
     for arrow in arrows:
         screen.blit(arrow.image, arrow.rect)
+    screen.blit(score.image, score.rect)
+    screen.blit(multiplier.image, multiplier.rect)
+    screen.blit(streak.image, streak.rect)
 
 
     pygame.display.flip()   

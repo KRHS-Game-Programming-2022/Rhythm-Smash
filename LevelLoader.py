@@ -11,10 +11,9 @@ def loadLevel(lev):
 
 
     size = 50
+    speed = [0,2]
+    arrows = []
     offset = size/2
-    tiles = []
-    walls = []
-    spawners = []
 
     newLines = []
     for line in lines:
@@ -28,11 +27,14 @@ def loadLevel(lev):
 
     for y, line in enumerate(lines):
         for x, c in enumerate(line):
-            if c == "#":
-                walls += [Wall([x*size+offset, y*size+offset])]
-            elif c == "X":
-                spawners += [Spawner([x*size+offset, y*size+offset])]
-    tiles = [walls,
-             spawners]
+            if c == "<":
+                arrows += [ArrowTile("left", speed, [75, -100-(y*size*2+offset)])]
+            elif c == "v":
+                arrows += [ArrowTile("down", speed, [150, -100-(y*size*2+offset)])]
+            elif c == "^":
+                arrows += [ArrowTile("up", speed, [225, -100-(y*size*2+offset)])]
+            elif c == ">":
+                arrows += [ArrowTile("right", speed, [300, -100-(y*size*2+offset)])]
 
-    return tiles
+    return arrows
+
