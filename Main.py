@@ -17,7 +17,7 @@ screen = pygame.display.set_mode(size)
 mode = "main menu"
 
 while True:
-    bgImage = pygame.image.load("Backgrounds/Start Screen.png")
+    bgImage = pygame.image.load("Screens/Main Screen.png")
     bgRect = bgImage.get_rect()
 
 
@@ -50,6 +50,7 @@ while True:
                   "down": ArrowBox("down", [150, 550]),
                   "up": ArrowBox("up", [225, 550]),
                   "right": ArrowBox("right", [300, 550])}
+
     while mode == "game":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -114,7 +115,7 @@ while True:
             if not arrow.living:
                 arrows.remove(arrow)
                 if len(arrows) == 0:
-                    mode = "main menu"
+                    mode = "scores"
             if not arrow.available:
                 continuous = 0
                 multiply = 1
@@ -133,3 +134,18 @@ while True:
         clock.tick(60)
         print()
         #print(clock.get_fps())
+
+    score = HUD("Score: ", size, [450, 350])
+    score.update(points)
+    while mode == "scores":
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    mode = "main menu"
+
+        screen.fill((64, 64, 64))
+        screen.blit(score.image, score.rect)
+        pygame.display.flip()
+        clock.tick(60)
