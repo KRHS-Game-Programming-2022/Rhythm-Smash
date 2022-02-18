@@ -28,6 +28,7 @@ while True:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     mode = "game"
+                    bgImage = pygame.image.load("Screens/Blank Background.png")
 
         screen.fill((255, 128, 64))
         screen.blit(bgImage, bgRect)
@@ -120,7 +121,7 @@ while True:
                 continuous = 0
                 multiply = 1
 
-        screen.fill((64, 64, 64))
+        screen.blit(bgImage, bgRect)
         for box in arrowBoxes.values():
             screen.blit(box.image, box.rect)
         for arrow in arrows:
