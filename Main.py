@@ -20,6 +20,7 @@ while True:
     bgImage = pygame.image.load("Screens/Main Screen.png")
     bgRect = bgImage.get_rect()
 
+
 #MAIN MENU
     while mode == "main menu":
         bgImage = pygame.image.load("Screens/Main Screen.png")
@@ -65,6 +66,9 @@ while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    mode = "main menu"
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if 464 <= mouse[0] <= 464 + 362 and 577 <= mouse[1] <= 577 + 72:
                     mode = "game"
@@ -79,7 +83,10 @@ while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+
             elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    mode = "main menu"
                 if event.key == pygame.K_LEFT or event.key == pygame.K_h:
                     arrowBoxes["left"].active = True
                 elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
@@ -167,6 +174,9 @@ while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    mode = "main menu"
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if 684 <= mouse[0] <= 684 + 150 and 588 <= mouse[1] <= 588 + 48:
                     mode = "highscores"
@@ -183,6 +193,9 @@ while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    mode = "main menu"
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if 34 <= mouse[0] <= 34 + 182 and 588 <= mouse[1] <= 616 + 51:
                     mode = "level select"
