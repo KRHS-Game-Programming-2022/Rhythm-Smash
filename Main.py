@@ -20,16 +20,23 @@ while True:
     bgImage = pygame.image.load("Screens/Main Screen.png")
     bgRect = bgImage.get_rect()
 
-
+#MAIN MENU
     while mode == "main menu":
+        bgImage = pygame.image.load("Screens/Main Screen.png")
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    mode = "game"
-                    bgImage = pygame.image.load("Screens/Blank Background.png")
+            if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
+                if 352 <= mouse[0] <= 352 + 196 and 543 <= mouse[1] <= 543 + 61:
+                    mode = "level select"
 
+                if 710 <= mouse[0] <= 710 + 133 and 562 <= mouse[1] <= 562 + 42:
+                    pygame.quit()
+
+                if 59 <= mouse[0] <= 59 + 149 and 562 <= mouse[1] <= 562 + 40:
+                    print("Credits to be added")
+        mouse = pygame.mouse.get_pos()
         screen.fill((255, 128, 64))
         screen.blit(bgImage, bgRect)
 
@@ -51,8 +58,24 @@ while True:
                   "down": ArrowBox("down", [150, 550]),
                   "up": ArrowBox("up", [225, 550]),
                   "right": ArrowBox("right", [300, 550])}
+#LEVEL SELECT
+    while mode == "level select":
+        bgImage = pygame.image.load("Screens/Level Select.png")
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if 464 <= mouse[0] <= 464 + 362 and 577 <= mouse[1] <= 577 + 72:
+                    mode = "game"
+
+        mouse = pygame.mouse.get_pos()
+        screen.blit(bgImage, bgRect)
+        pygame.display.flip()
+        clock.tick(60)
+#GAME
     while mode == "game":
+        bgImage = pygame.image.load("Backgrounds/Background 14.png")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -116,7 +139,7 @@ while True:
             if not arrow.living:
                 arrows.remove(arrow)
                 if len(arrows) == 0:
-                    mode = "scores"
+                    mode = "end level"
             if not arrow.available:
                 continuous = 0
                 multiply = 1
@@ -135,18 +158,36 @@ while True:
         clock.tick(60)
         print()
         #print(clock.get_fps())
-
+#END LEVEL
     score = HUD("Score: ", size, [450, 350])
     score.update(points)
-    while mode == "scores":
+    while mode == "end level":
+        bgImage = pygame.image.load("Screens/End Level Screen.png")
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    mode = "main menu"
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if 684 <= mouse[0] <= 684 + 150 and 588 <= mouse[1] <= 588 + 48:
+                    mode = "highscores"
 
-        screen.fill((64, 64, 64))
+        mouse = pygame.mouse.get_pos()
+        screen.blit(bgImage, bgRect)
         screen.blit(score.image, score.rect)
+        pygame.display.flip()
+        clock.tick(60)
+#HIGHSCORES
+    while mode == "highscores":
+        bgImage = pygame.image.load("Screens/Highscores.png")
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if 34 <= mouse[0] <= 34 + 182 and 588 <= mouse[1] <= 616 + 51:
+                    mode = "level select"
+
+        mouse = pygame.mouse.get_pos()
+        screen.blit(bgImage, bgRect)
         pygame.display.flip()
         clock.tick(60)
