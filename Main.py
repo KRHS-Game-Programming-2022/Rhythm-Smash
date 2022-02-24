@@ -79,7 +79,7 @@ while True:
         clock.tick(60)
 #GAME
     while mode == "game":
-        bgImage = pygame.image.load("Backgrounds/Background 14.png")
+        bgImage = pygame.image.load("Backgrounds/Background 3.png")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -166,7 +166,7 @@ while True:
         print()
         #print(clock.get_fps())
 #END LEVEL
-    score = HUD("Score: ", size, [450, 350])
+    score = HUD("Score: ", size, [450, 250])
     score.update(points)
     while mode == "end level":
         bgImage = pygame.image.load("Screens/End Level Screen.png")
