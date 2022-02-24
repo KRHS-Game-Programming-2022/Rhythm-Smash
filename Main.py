@@ -22,8 +22,11 @@ while True:
 
 
 #MAIN MENU
+    pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final Main Menu Song - 2-16-22 9.30 AM.ogg")
+    pygame.mixer.music.play()
     while mode == "main menu":
         bgImage = pygame.image.load("Screens/Main Screen.png")
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -78,8 +81,12 @@ while True:
         pygame.display.flip()
         clock.tick(60)
 #GAME
+    bgImage = pygame.image.load("Backgrounds/Background 3.png")
+    pygame.mixer.music.load("Levels/Sounds/Rythm smash final.ogg")
+    pygame.mixer.music.play()
     while mode == "game":
-        bgImage = pygame.image.load("Backgrounds/Background 3.png")
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -147,6 +154,7 @@ while True:
                 arrows.remove(arrow)
                 if len(arrows) == 0:
                     mode = "end level"
+                    pygame.mixer.music.load("Levels/Sounds/Rythm smash final.ogg")
             if not arrow.available:
                 continuous = 0
                 multiply = 1
