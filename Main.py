@@ -82,7 +82,7 @@ while True:
         clock.tick(60)
 #GAME
     bgImage = pygame.image.load("Backgrounds/Background 3.png")
-    pygame.mixer.music.load("Levels/Sounds/Rythm smash final.ogg")
+    pygame.mixer.music.load("Levels/Sounds/Rythm smash final 150 Gm.ogg")
     pygame.mixer.music.play()
     while mode == "game":
 
