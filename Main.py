@@ -18,16 +18,15 @@ screen = pygame.display.set_mode(size)
 mode = "main menu"
 
 while True:
-    bgImage = pygame.image.load("Screens/Main Screen.png")
-    bgRect = bgImage.get_rect()
-
-
 #MAIN MENU
-    pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final Main Menu Song - 2-16-22 9.30 AM.ogg")
-    pygame.mixer.music.play()
-    playButton = Button("play", [353, 543])
-    quitButton = Button("quit", [710, 562])
-    creditsButton = Button("credits", [59, 562])
+    if mode == "main menu":
+        bgImage = pygame.image.load("Screens/Main Screen.png")
+        bgRect = bgImage.get_rect()
+        pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final Main Menu Song - 2-16-22 9.30 AM.ogg")
+        pygame.mixer.music.play()
+        playButton = Button("play", [353, 543])
+        quitButton = Button("quit", [710, 562])
+        creditsButton = Button("credits", [59, 562])
     while mode == "main menu":
         bgImage = pygame.image.load("Screens/Main Screen.png")
 
@@ -50,7 +49,7 @@ while True:
                 if quitButton.clickUp(event.pos):
                     sys.exit()
                 if creditsButton.clickUp(event.pos):
-                    print("credits")
+                    mode = "credits"
 
         mouse = pygame.mouse.get_pos()
         screen.fill((255, 128, 64))
@@ -71,13 +70,16 @@ while True:
     multiply = 1
     continuous = 0
 
-    arrows = loadLevel("example.lvl")
+
     arrowBoxes = {"left": ArrowBox("left", [75, 550]),
                   "down": ArrowBox("down", [150, 550]),
                   "up": ArrowBox("up", [225, 550]),
                   "right": ArrowBox("right", [300, 550])}
 #LEVEL SELECT
-    LevelOneIcon = Button("LevelOne", [53, 60], "Levels/Icons/")
+    if mode == "level select":
+        LevelOneIcon = Button("LevelOne", [53, 60], "Levels/Icons/")
+        level = ""
+        song = ""
     while mode == "level select":
         bgImage = pygame.image.load("Screens/Level Select.png")
 
@@ -91,7 +93,8 @@ while True:
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if LevelOneIcon.clickUp(event.pos):
-                    mode = "level select"
+                    level = "example.lvl"
+                    song = "Levels/Sounds/Rythm smash final 150 Gm.ogg"
                 if quitButton.clickUp(event.pos):
                     sys.exit()
                 if creditsButton.clickUp(event.pos):
@@ -100,8 +103,10 @@ while True:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if 464 <= mouse[0] <= 464 + 362 and 577 <= mouse[1] <= 577 + 72:
-                    mode = "game"
+                if level and song != "":
+                    if 464 <= mouse[0] <= 464 + 362 and 577 <= mouse[1] <= 577 + 72:
+                        mode = "game"
+
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
@@ -109,12 +114,13 @@ while True:
         pygame.display.flip()
         clock.tick(60)
 #GAME
-    bgImage = pygame.image.load("Backgrounds/Background 3.png")
-    pygame.mixer.music.load("Levels/Sounds/Rythm smash final 150 Gm.ogg")
-    pygame.mixer.music.play()
+    if mode == "game":
+        bgImage = pygame.image.load("Backgrounds/Background 3.png")
+        pygame.mixer.music.load(song)
+        pygame.mixer.music.play()
+        arrows = loadLevel(level)
+
     while mode == "game":
-
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -203,8 +209,9 @@ while True:
         print()
         #print(clock.get_fps())
 #END LEVEL
-    score = HUD("Score: ", size, [450, 250])
-    score.update(points)
+    if mode == "end level":
+        score = HUD("Score: ", size, [450, 250])
+        score.update(points)
     while mode == "end level":
         bgImage = pygame.image.load("Screens/End Level Screen.png")
 
@@ -239,5 +246,26 @@ while True:
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
+        pygame.display.flip()
+        clock.tick(60)
+### CREDITS
+    if mode == "credits":
+        mainmenuButton = Button("main menu", [59, 562])
+        bgImage = pygame.image.load("Screens/Credits.png")
+    while mode == "credits":
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEMOTION:
+                mainmenuButton.hover(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:  # BUTTONS!!!
+                mainmenuButton.clickDown(event.pos)
+            if event.type == pygame.MOUSEBUTTONUP:
+                if mainmenuButton.clickUp(event.pos):
+                    mode = "main menu"
+
+        mouse = pygame.mouse.get_pos()
+        screen.blit(bgImage, bgRect)
+        screen.blit(mainmenuButton.image, mainmenuButton.rect)
         pygame.display.flip()
         clock.tick(60)
