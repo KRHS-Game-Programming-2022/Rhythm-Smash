@@ -22,15 +22,12 @@ while True:
     if mode == "main menu":
         bgImage = pygame.image.load("Screens/Main Screen.png")
         bgRect = bgImage.get_rect()
-        pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final Main Menu Song - 2-16-22 9.30 AM.ogg")
+        pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final FIX Main Menu Song - 2-16-22 9.30 AM.ogg")
         pygame.mixer.music.play()
         playButton = Button("play", [353, 543])
         quitButton = Button("quit", [710, 562])
         creditsButton = Button("credits", [59, 562])
     while mode == "main menu":
-        bgImage = pygame.image.load("Screens/Main Screen.png")
-
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -188,7 +185,7 @@ while True:
                 arrows.remove(arrow)
                 if len(arrows) == 0:
                     mode = "end level"
-                    pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final Main Menu Song - 2-16-22 9.30 AM.ogg")
+                    pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final FIX Main Menu Song - 2-16-22 9.30 AM.ogg")
                     pygame.mixer.music.play()
             if not arrow.available:
                 continuous = 0
