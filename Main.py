@@ -75,6 +75,7 @@ while True:
 #LEVEL SELECT
     if mode == "level select":
         LevelOneIcon = Button("LevelOne", [53, 60], "Levels/Icons/")
+        playLevel = Button("playLevel", [441, 569])
         level = ""
         song = ""
     while mode == "level select":
@@ -85,17 +86,20 @@ while True:
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
                 LevelOneIcon.hover(event.pos)
+                playLevel.hover(event.pos)
             if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
                 LevelOneIcon.clickUp(event.pos)
+                playLevel.clickUp(event.pos)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if LevelOneIcon.clickUp(event.pos):
                     level = "example.lvl"
                     song = "Levels/Sounds/Rythm smash final 150 Gm.ogg"
-                if quitButton.clickUp(event.pos):
-                    sys.exit()
-                if creditsButton.clickUp(event.pos):
-                    print("credits")
+                if playLevel.clickUp(event.pos):
+                    if level and song != "":
+                        mode = "game"
+
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
@@ -108,6 +112,7 @@ while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
         screen.blit(LevelOneIcon.image, LevelOneIcon.rect)
+        screen.blit(playLevel.image, playLevel.rect)
         pygame.display.flip()
         clock.tick(60)
 #GAME
