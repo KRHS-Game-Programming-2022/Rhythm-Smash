@@ -95,9 +95,12 @@ while True:
                 if LevelOneIcon.clickUp(event.pos):
                     level = "example.lvl"
                     song = "Levels/Sounds/Rythm smash final 150 Gm.ogg"
+                    LevelOneIcon.reset()
                 if playLevel.clickUp(event.pos):
                     if level and song != "":
                         mode = "game"
+                    else:
+                        playLevel.reset()
 
 
             if event.type == pygame.KEYDOWN:

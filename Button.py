@@ -37,3 +37,7 @@ class Button():
                 return True
         self.clicked = False
         return False
+
+    def reset(self):
+        self.image = self.baseImage
+        self.clicked = False
