@@ -17,6 +17,8 @@ screen = pygame.display.set_mode(size)
 
 mode = "main menu"
 
+
+
 while True:
 #MAIN MENU
     if mode == "main menu":
@@ -101,16 +103,15 @@ while True:
                         mode = "game"
                     else:
                         playLevel.reset()
-
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
+        """
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if level and song != "":
                     if 464 <= mouse[0] <= 464 + 362 and 577 <= mouse[1] <= 577 + 72:
                         mode = "game"
-
+"""
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
@@ -215,8 +216,13 @@ while True:
         #print(clock.get_fps())
 #END LEVEL
     if mode == "end level":
-        score = HUD("Score: ", size, [450, 250])
-        score.update(points)
+
+        smallFont = pygame.font.SysFont('Calibri', 40)
+
+        scoreText = smallFont.render(str(points), True, (255, 255, 255))
+        highText = smallFont.render(str(level), True, (255, 255, 255))
+        scoretextRect = scoreText.get_rect(midtop=[435, 130])
+
     while mode == "end level":
         bgImage = pygame.image.load("Screens/End Level Screen.png")
 
@@ -232,7 +238,7 @@ while True:
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
-        screen.blit(score.image, score.rect)
+        screen.blit(scoreText, scoretextRect)
         pygame.display.flip()
         clock.tick(60)
 #HIGHSCORES
