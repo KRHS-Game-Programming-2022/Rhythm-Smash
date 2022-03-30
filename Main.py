@@ -121,7 +121,7 @@ while True:
         clock.tick(60)
 #GAME
     if mode == "game":
-        bgImage = pygame.image.load("Backgrounds/Background 3.png")
+        bgImage = pygame.image.load("Backgrounds/Background.png")
         pygame.mixer.music.load(song)
         pygame.mixer.music.play()
         arrows = loadLevel(level)
