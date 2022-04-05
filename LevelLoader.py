@@ -2,7 +2,7 @@ from ArrowTile import*
 from ArrowBox import*
 
 def loadLevel(lev):
-    f = open(lev, 'r')
+    f = open(lev+".lvl", 'r')
     lines = f.readlines()
     f.close()
 

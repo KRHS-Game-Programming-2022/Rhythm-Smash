@@ -2,27 +2,30 @@ from ArrowTile import*
 from ArrowBox import*
 
 def loadScores(lev):
-    f = open("Levels/scrs", 'r')
+    f = open("Levels/" + lev+ ".scrs", 'r')
     lines = f.readlines()
     f.close()
 
 
     newLines = []
     for line in lines:
-        newline = ""
-        for c in line:
-            if c != "\n":
-                newline += c
+        newline = int(line);
         newLines += [newline]
     lines = newLines
 
-    newlines = []
-    for line in lines:
-        newLines += line.split(',')
-    lines = newLines
+    return lines
 
-    for line in lines:
-        if line[0] == "lev":
-            pass
+
+def saveScores(lev, scores):
+    out = ""
+    for score in scores:
+        out += str(score)+"\n"
+
+    f = open("Levels/" + lev+ ".scrs", 'w')
+    lines = f.write(out)
+    f.close()
+
+
+
 
 
