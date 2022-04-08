@@ -70,15 +70,18 @@ while True:
     multiply = 1
     continuous = 0
 
-
     arrowBoxes = {"left": ArrowBox("left", [75, 550]),
                   "down": ArrowBox("down", [150, 550]),
                   "up": ArrowBox("up", [225, 550]),
                   "right": ArrowBox("right", [300, 550])}
+
+    backgroundSelected = "Backgrounds/Background 9.png"
+
 #LEVEL SELECT
     if mode == "level select":
         LevelOneIcon = Button("LevelOne", [53, 60], "Levels/Icons/")
         playLevel = Button("playLevel", [441, 569])
+        backgroundButton = Button("backgrounds", [450, 450])
         level = ""
         song = ""
     while mode == "level select":
@@ -90,9 +93,11 @@ while True:
             if event.type == pygame.MOUSEMOTION:
                 LevelOneIcon.hover(event.pos)
                 playLevel.hover(event.pos)
+                backgroundButton.hover(event.pos)
             if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
                 LevelOneIcon.clickUp(event.pos)
                 playLevel.clickUp(event.pos)
+                backgroundButton.clickUp(event.pos)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if LevelOneIcon.clickUp(event.pos):
@@ -104,6 +109,8 @@ while True:
                         mode = "game"
                     else:
                         playLevel.reset()
+                if backgroundButton.clickUp(event.pos):
+                    mode = "background select"
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
@@ -118,11 +125,48 @@ while True:
         screen.blit(bgImage, bgRect)
         screen.blit(LevelOneIcon.image, LevelOneIcon.rect)
         screen.blit(playLevel.image, playLevel.rect)
+        screen.blit(backgroundButton.image, backgroundButton.rect)
+        pygame.display.flip()
+        clock.tick(60)
+### BG Select
+    if mode == "background select":
+        backButton = Button("back", [50, 600])
+        bgButton = Button("bg1", [200, 300])
+    while mode == "background select":
+        bgImage = pygame.image.load("Backgrounds/Background.png")
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEMOTION:
+                backButton.hover(event.pos)
+                bgButton.hover(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:  # BUTTONS!!!
+                backButton.clickUp(event.pos)
+                bgButton.clickUp(event.pos)
+            if event.type == pygame.MOUSEBUTTONUP:
+                if backButton.clickUp(event.pos):
+                    mode = "level select"
+                if bgButton.clickUp(event.pos):
+                    backgroundSelected = "Backgrounds/Background.png"
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    mode = "main menu"
+        """
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if level and song != "":
+                    if 464 <= mouse[0] <= 464 + 362 and 577 <= mouse[1] <= 577 + 72:
+                        mode = "game"
+"""
+
+        mouse = pygame.mouse.get_pos()
+        screen.blit(bgImage, bgRect)
+        screen.blit(backButton.image, backButton.rect)
         pygame.display.flip()
         clock.tick(60)
 #GAME
     if mode == "game":
-        bgImage = pygame.image.load("Backgrounds/Background.png")
+        bgImage = pygame.image.load(backgroundSelected)
         pygame.mixer.music.load(song)
         pygame.mixer.music.play()
         arrows = loadLevel(level)
