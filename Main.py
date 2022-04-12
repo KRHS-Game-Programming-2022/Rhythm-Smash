@@ -129,9 +129,20 @@ while True:
         pygame.display.flip()
         clock.tick(60)
 ### BG Select
+    bgButtons = []
+    xgap = 0
+    ygap = 0
     if mode == "background select":
-        backButton = Button("back", [50, 600])
-        bgButton = Button("bg1", [200, 300])
+        for i in range(20):
+            if i%5==0 and i!=0:
+                ygap += 150
+                xgap = 0
+
+            bgButtons += [Button("bg" + str(i), [50+xgap, 40+ygap])]
+            xgap += 160
+
+        backButton = Button("back", [50, 700])
+
     while mode == "background select":
         bgImage = pygame.image.load("Backgrounds/Background.png")
 
@@ -139,15 +150,15 @@ while True:
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
-                backButton.hover(event.pos)
-                bgButton.hover(event.pos)
+                for button in bgButtons:
+                    button.hover(event.pos)
             if event.type == pygame.MOUSEBUTTONDOWN:  # BUTTONS!!!
-                backButton.clickUp(event.pos)
-                bgButton.clickUp(event.pos)
+                for button in bgButtons:
+                    button.clickUp(event.pos)
             if event.type == pygame.MOUSEBUTTONUP:
                 if backButton.clickUp(event.pos):
                     mode = "level select"
-                if bgButton.clickUp(event.pos):
+                if bgButtons.clickUp(event.pos):
                     backgroundSelected = "Backgrounds/Background.png"
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -162,6 +173,8 @@ while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
         screen.blit(backButton.image, backButton.rect)
+        for button in bgButtons:
+            screen.blit(button.image, button.rect)
         pygame.display.flip()
         clock.tick(60)
 #GAME
