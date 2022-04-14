@@ -4,6 +4,7 @@ from ArrowBox import *
 from HUD import*
 from LevelLoader import*
 from Button import*
+from ScoreLoader import*
 
 
 
@@ -69,15 +70,18 @@ while True:
     multiply = 1
     continuous = 0
 
-
     arrowBoxes = {"left": ArrowBox("left", [75, 550]),
                   "down": ArrowBox("down", [150, 550]),
                   "up": ArrowBox("up", [225, 550]),
                   "right": ArrowBox("right", [300, 550])}
+
+    backgroundSelected = "Backgrounds/Background 9.png"
+
 #LEVEL SELECT
     if mode == "level select":
         LevelOneIcon = Button("LevelOne", [53, 60], "Levels/Icons/")
         playLevel = Button("playLevel", [441, 569])
+        backgroundButton = Button("backgrounds", [450, 450])
         level = ""
         song = ""
     while mode == "level select":
@@ -89,13 +93,15 @@ while True:
             if event.type == pygame.MOUSEMOTION:
                 LevelOneIcon.hover(event.pos)
                 playLevel.hover(event.pos)
+                backgroundButton.hover(event.pos)
             if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
                 LevelOneIcon.clickUp(event.pos)
                 playLevel.clickUp(event.pos)
+                backgroundButton.clickUp(event.pos)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if LevelOneIcon.clickUp(event.pos):
-                    level = "example.lvl"
+                    level = "example"
                     song = "Levels/Sounds/Rythm smash final 150 Gm.ogg"
                     LevelOneIcon.reset()
                 if playLevel.clickUp(event.pos):
@@ -103,6 +109,8 @@ while True:
                         mode = "game"
                     else:
                         playLevel.reset()
+                if backgroundButton.clickUp(event.pos):
+                    mode = "background select"
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
@@ -117,11 +125,61 @@ while True:
         screen.blit(bgImage, bgRect)
         screen.blit(LevelOneIcon.image, LevelOneIcon.rect)
         screen.blit(playLevel.image, playLevel.rect)
+        screen.blit(backgroundButton.image, backgroundButton.rect)
+        pygame.display.flip()
+        clock.tick(60)
+### BG Select
+    bgButtons = []
+    xgap = 0
+    ygap = 0
+    if mode == "background select":
+        for i in range(20):
+            if i%5==0 and i!=0:
+                ygap += 150
+                xgap = 0
+
+            bgButtons += [Button("bg" + str(i), [50+xgap, 40+ygap])]
+            xgap += 160
+
+        backButton = Button("back", [50, 700])
+
+    while mode == "background select":
+        bgImage = pygame.image.load("Backgrounds/Background.png")
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEMOTION:
+                for button in bgButtons:
+                    button.hover(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:  # BUTTONS!!!
+                for button in bgButtons:
+                    button.clickUp(event.pos)
+            if event.type == pygame.MOUSEBUTTONUP:
+                if backButton.clickUp(event.pos):
+                    mode = "level select"
+                if bgButtons.clickUp(event.pos):
+                    backgroundSelected = "Backgrounds/Background.png"
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    mode = "main menu"
+        """
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if level and song != "":
+                    if 464 <= mouse[0] <= 464 + 362 and 577 <= mouse[1] <= 577 + 72:
+                        mode = "game"
+"""
+
+        mouse = pygame.mouse.get_pos()
+        screen.blit(bgImage, bgRect)
+        screen.blit(backButton.image, backButton.rect)
+        for button in bgButtons:
+            screen.blit(button.image, button.rect)
         pygame.display.flip()
         clock.tick(60)
 #GAME
     if mode == "game":
-        bgImage = pygame.image.load("Backgrounds/Background.png")
+        bgImage = pygame.image.load(backgroundSelected)
         pygame.mixer.music.load(song)
         pygame.mixer.music.play()
         arrows = loadLevel(level)
@@ -216,13 +274,19 @@ while True:
         #print(clock.get_fps())
 #END LEVEL
     if mode == "end level":
-
+        scores = loadScores(level)
         smallFont = pygame.font.SysFont('Calibri', 40)
 
-        scoreText = smallFont.render(str(points), True, (255, 255, 255))
-        highText = smallFont.render(str(level), True, (255, 255, 255))
-        scoretextRect = scoreText.get_rect(midtop=[435, 130])
+        scores += [points]
+        scores.sort(reverse = True)
+        scores = scores[0:10]
 
+        saveScores(level, scores)
+
+        scoreText = smallFont.render(str(points), True, (255, 255, 255))
+        highText = smallFont.render(str(scores[0]), True, (255, 255, 255))
+        scoretextRect = scoreText.get_rect(midtop=[435, 130])
+        highTextRect = highText.get_rect(midtop=[435, 375])
     while mode == "end level":
         bgImage = pygame.image.load("Screens/End Level Screen.png")
 
@@ -239,9 +303,24 @@ while True:
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
         screen.blit(scoreText, scoretextRect)
+        screen.blit(highText, highTextRect)
         pygame.display.flip()
         clock.tick(60)
 #HIGHSCORES
+    if mode == "highscores":
+        smallFont = pygame.font.SysFont('Consolas', 38)
+        renderList = []
+        y = 135
+        yChange = 45
+        for i, score in enumerate(scores):
+            if i+1 < 10:
+                highText = smallFont.render(str(i+1)+".  "+str(score), True, (255, 255, 255))
+            else:
+                highText = smallFont.render(str(i + 1) + ". " + str(score), True, (255, 255, 255))
+            highTextRect = highText.get_rect(topleft=[500, y])
+            y+= yChange
+            listItem = [highText, highTextRect]
+            renderList += [listItem]
     while mode == "highscores":
         bgImage = pygame.image.load("Screens/Highscores.png")
 
@@ -257,6 +336,8 @@ while True:
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
+        for item in renderList:
+            screen.blit(item[0], item[1])
         pygame.display.flip()
         clock.tick(60)
 ### CREDITS
