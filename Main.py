@@ -17,7 +17,7 @@ screen = pygame.display.set_mode(size)
 
 
 mode = "main menu"
-
+backgroundSelected = "Backgrounds/Background.png"
 
 
 while True:
@@ -75,7 +75,7 @@ while True:
                   "up": ArrowBox("up", [225, 550]),
                   "right": ArrowBox("right", [300, 550])}
 
-    backgroundSelected = "Backgrounds/Background 9.png"
+
 
 #LEVEL SELECT
     if mode == "level select":
@@ -141,7 +141,7 @@ while True:
             bgButtons += [Button("bg" + str(i), [50+xgap, 40+ygap])]
             xgap += 160
 
-        backButton = Button("back", [50, 700])
+        backButton = Button("back", [50, 600])
 
     while mode == "background select":
         bgImage = pygame.image.load("Backgrounds/Background.png")
@@ -150,16 +150,21 @@ while True:
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
+                backButton.hover(event.pos)
                 for button in bgButtons:
                     button.hover(event.pos)
             if event.type == pygame.MOUSEBUTTONDOWN:  # BUTTONS!!!
+                backButton.clickUp(event.pos)
                 for button in bgButtons:
                     button.clickUp(event.pos)
             if event.type == pygame.MOUSEBUTTONUP:
                 if backButton.clickUp(event.pos):
                     mode = "level select"
-                if bgButtons.clickUp(event.pos):
-                    backgroundSelected = "Backgrounds/Background.png"
+                for button in bgButtons:
+                    if button.clickUp(event.pos):
+                        i = button.baseText[2:]
+                        backgroundSelected = "Backgrounds/Background " + str(i) + ".png"
+                        print(button.baseText, i, backgroundSelected)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
@@ -179,6 +184,7 @@ while True:
         clock.tick(60)
 #GAME
     if mode == "game":
+        print(backgroundSelected)
         bgImage = pygame.image.load(backgroundSelected)
         pygame.mixer.music.load(song)
         pygame.mixer.music.play()
