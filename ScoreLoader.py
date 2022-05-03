@@ -1,10 +1,15 @@
+import os
 from ArrowTile import*
 from ArrowBox import*
 
 def loadScores(lev):
-    f = open("Levels/" + lev+ ".scrs", 'r')
-    lines = f.readlines()
-    f.close()
+    files = os.listdir("Levels/")
+    if (lev + ".scrs") not in files:
+        lines = []
+    else:
+        f = open("Levels/" + lev+ ".scrs", 'r')
+        lines = f.readlines()
+        f.close()
 
 
     newLines = []
