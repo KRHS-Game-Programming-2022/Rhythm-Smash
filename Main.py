@@ -144,7 +144,7 @@ while True:
         backButton = Button("back", [50, 600])
 
     while mode == "background select":
-        bgImage = pygame.image.load("Backgrounds/Background.png")
+        bgImage = pygame.image.load("Backgrounds/Background 0.png")
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
