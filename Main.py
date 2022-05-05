@@ -17,7 +17,7 @@ screen = pygame.display.set_mode(size)
 
 
 mode = "main menu"
-backgroundSelected = "Backgrounds/Background.png"
+backgroundSelected = "Backgrounds/Background 0.png"
 
 
 while True:

@@ -21,7 +21,7 @@ class ArrowTile():
     def wallCollide(self, size):
         width = size[0]
         height = size[1]
-        if self.rect.bottom > height:
+        if self.rect.top > height:
             self.living = False
             self.available = False
 
