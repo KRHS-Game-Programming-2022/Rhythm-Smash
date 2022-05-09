@@ -293,6 +293,7 @@ while True:
         highText = smallFont.render(str(scores[0]), True, (255, 255, 255))
         scoretextRect = scoreText.get_rect(midtop=[435, 130])
         highTextRect = highText.get_rect(midtop=[435, 375])
+        nextButton = Button("next", [650,600])
     while mode == "end level":
         bgImage = pygame.image.load("Screens/End Level Screen.png")
 
@@ -302,18 +303,25 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if 684 <= mouse[0] <= 684 + 150 and 588 <= mouse[1] <= 588 + 48:
+            if event.type == pygame.MOUSEMOTION:
+                nextButton.hover(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
+                nextButton.clickDown(event.pos)
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if nextButton.clickUp(event.pos):
                     mode = "highscores"
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
         screen.blit(scoreText, scoretextRect)
         screen.blit(highText, highTextRect)
+        screen.blit(nextButton.image, nextButton.rect)
         pygame.display.flip()
         clock.tick(60)
 #HIGHSCORES
     if mode == "highscores":
+        levelselectButton = Button("levelselect", [50, 625])
         smallFont = pygame.font.SysFont('Consolas', 38)
         renderList = []
         y = 135
@@ -336,14 +344,20 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if 34 <= mouse[0] <= 34 + 182 and 588 <= mouse[1] <= 616 + 51:
+            if event.type == pygame.MOUSEMOTION:
+                levelselectButton.hover(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:  # BUTTONS!!!
+                levelselectButton.clickDown(event.pos)
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if levelselectButton.clickUp(event.pos):
                     mode = "level select"
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
         for item in renderList:
             screen.blit(item[0], item[1])
+        screen.blit(levelselectButton.image, levelselectButton.rect)
         pygame.display.flip()
         clock.tick(60)
 ### CREDITS
