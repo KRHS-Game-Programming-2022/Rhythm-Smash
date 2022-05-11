@@ -1,4 +1,4 @@
-import pygame, sys, math, random
+import pygame, sys, math, random, os
 from ArrowTile import *
 from ArrowBox import *
 from HUD import*
@@ -23,7 +23,7 @@ backgroundSelected = "Backgrounds/Background 0.png"
 while True:
 #MAIN MENU
     if mode == "main menu":
-        bgImage = pygame.image.load("Screens/Main Screen.png")
+        bgImage = pygame.image.load("Screens/Main Screen.png").convert()
         bgRect = bgImage.get_rect()
         pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final FIX Main Menu Song - 2-16-22 9.30 AM.ogg")
         pygame.mixer.music.play()
@@ -85,7 +85,7 @@ while True:
         level = ""
         song = ""
     while mode == "level select":
-        bgImage = pygame.image.load("Screens/Level Select.png")
+        bgImage = pygame.image.load("Screens/Level Select.png").convert()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -144,7 +144,7 @@ while True:
         backButton = Button("back", [50, 600])
 
     while mode == "background select":
-        bgImage = pygame.image.load("Backgrounds/Background 0.png")
+        bgImage = pygame.image.load("Backgrounds/Background 0.png").convert()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -185,7 +185,7 @@ while True:
 #GAME
     if mode == "game":
         print(backgroundSelected)
-        bgImage = pygame.image.load(backgroundSelected)
+        bgImage = pygame.image.load(backgroundSelected).convert()
         pygame.mixer.music.load(song)
         pygame.mixer.music.play()
         arrows = loadLevel(level)
@@ -295,7 +295,7 @@ while True:
         highTextRect = highText.get_rect(midtop=[435, 375])
         nextButton = Button("next", [650,600])
     while mode == "end level":
-        bgImage = pygame.image.load("Screens/End Level Screen.png")
+        bgImage = pygame.image.load("Screens/End Level Screen.png").convert()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -336,7 +336,7 @@ while True:
             listItem = [highText, highTextRect]
             renderList += [listItem]
     while mode == "highscores":
-        bgImage = pygame.image.load("Screens/Highscores.png")
+        bgImage = pygame.image.load("Screens/Highscores.png").convert()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -363,7 +363,7 @@ while True:
 ### CREDITS
     if mode == "credits":
         mainmenuButton = Button("main menu", [59, 562])
-        bgImage = pygame.image.load("Screens/Credits.png")
+        bgImage = pygame.image.load("Screens/Credits.png").convert()
     while mode == "credits":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -381,3 +381,4 @@ while True:
         screen.blit(mainmenuButton.image, mainmenuButton.rect)
         pygame.display.flip()
         clock.tick(60)
+    print(memoryview)
