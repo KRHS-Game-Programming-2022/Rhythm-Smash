@@ -4,7 +4,7 @@ import pygame, sys, math
 class ArrowTile():
     def __init__(self, kind, speed=[0, 10], startPos=[0, 0]):
         self.kind = kind
-        self.image = pygame.image.load("Arrows/ArrowTiles/Images/" + self.kind + "Arrow.png")
+        self.image = pygame.image.load("Arrows/ArrowTiles/Images/" + self.kind + "Arrow.png").convert_alpha()
         self.rect = self.image.get_rect(center=startPos)
         self.speedx = speed[0]
         self.speedy = speed[1]

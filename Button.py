@@ -5,9 +5,9 @@ class Button():
     def __init__(self, text, startPos=[0, 0], path="Buttons/"):
         self.font = pygame.font.Font(None, 30)
         self.baseText = text
-        self.baseImage = pygame.image.load(path + text + "-base.png")
-        self.hoverImage = pygame.image.load(path + text + "-hover.png")
-        self.clickedImage = pygame.image.load(path + text + "-clicked.png")
+        self.baseImage = pygame.image.load(path + text + "-base.png").convert()
+        self.hoverImage = pygame.image.load(path + text + "-hover.png").convert()
+        self.clickedImage = pygame.image.load(path + text + "-clicked.png").convert()
         self.image = self.baseImage
         self.rect = self.image.get_rect(topleft=startPos)
         self.clicked = False
