@@ -1,7 +1,7 @@
 from ArrowTile import*
 from ArrowBox import*
 
-def loadLevel(lev):
+def loadLevel(lev, players = 1):
     f = open(lev+".lvl", 'r')
     lines = f.readlines()
     f.close()
