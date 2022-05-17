@@ -381,4 +381,4 @@ while True:
         screen.blit(mainmenuButton.image, mainmenuButton.rect)
         pygame.display.flip()
         clock.tick(60)
-    print(memoryview)
+
