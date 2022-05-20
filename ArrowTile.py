@@ -18,6 +18,10 @@ class ArrowTile():
         self.speed = [self.speedx, self.speedy]
         self.rect = self.rect.move(self.speed)
 
+    def __str__(self):
+        out = self.kind + " arrow, speed: " + str(self.speedy)
+        return out
+
     def wallCollide(self, size):
         width = size[0]
         height = size[1]
