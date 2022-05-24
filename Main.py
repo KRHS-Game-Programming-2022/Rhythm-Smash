@@ -386,7 +386,7 @@ while True:
         scores = loadScores(level)
         smallFont = pygame.font.SysFont('Calibri', 40)
 
-        scores += [points]
+        scores += [points, points2]
         scores.sort(reverse = True)
         scores = scores[0:10]
 
@@ -396,9 +396,22 @@ while True:
         highText = smallFont.render(str(scores[0]), True, (255, 255, 255))
         scoretextRect = scoreText.get_rect(midtop=[435, 130])
         highTextRect = highText.get_rect(midtop=[435, 375])
+
+        if player2:
+            scoreText = smallFont.render(str(points), True, (255, 255, 255))
+            highText = smallFont.render(str(scores[0]), True, (255, 255, 255))
+            scoretextRect = scoreText.get_rect(midtop=[200, 130])
+            highTextRect = highText.get_rect(midtop=[450, 475])
+
+            scoreText2 = smallFont.render(str(points2), True, (255, 255, 255))
+            scoretextRect2 = scoreText.get_rect(midtop=[680, 130])
+
         nextButton = Button("next", [650,600])
     while mode == "end level":
         bgImage = pygame.image.load("Screens/End Level Screen.png").convert()
+
+        if player2:
+            bgImage = pygame.image.load("Screens/2Player End Level Screen.png").convert()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -419,6 +432,8 @@ while True:
         screen.blit(bgImage, bgRect)
         screen.blit(scoreText, scoretextRect)
         screen.blit(highText, highTextRect)
+        if player2:
+            screen.blit(scoreText2, scoretextRect2)
         screen.blit(nextButton.image, nextButton.rect)
         pygame.display.flip()
         clock.tick(60)
