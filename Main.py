@@ -78,7 +78,7 @@ while True:
     multiply2 = 1
     continuous2 = 0
 
-    player2 = True
+    player2 = False
 
     arrowBoxes = {"left": ArrowBox("left", [75, 550]),
                   "down": ArrowBox("down", [150, 550]),
@@ -305,31 +305,31 @@ while True:
                         multiply = 1
 
                     box.active = False
+        if player2:
+            for arrow in arrows2:
+                arrow.move()
+                arrow.wallCollide(size)
+                for box in arrowBoxes2.values():
+                    if box.kind == arrow.kind and box.active:
+                        if box.getDist(arrow) < 200:
+                            points2 += 200 - (box.getDist(arrow) * int(multiply))
+                            continuous2 += 1
+                            arrow.living = False
+                            if continuous2 == 10:
+                                multiply2 += 1
+                            if continuous2 == 25:
+                                multiply2 += 1
+                            if continuous2 == 40:
+                                multiply2 += 1
+                            if continuous2 == 70:
+                                multiply2 += 1
+                            if continuous2 == 100:
+                                multiply2 = 10
+                        elif box.getDist(arrow) > 200:
+                            continuous2 = 0
+                            multiply2 = 1
 
-        for arrow in arrows2:
-            arrow.move()
-            arrow.wallCollide(size)
-            for box in arrowBoxes2.values():
-                if box.kind == arrow.kind and box.active:
-                    if box.getDist(arrow) < 200:
-                        points2 += 200 - (box.getDist(arrow) * int(multiply))
-                        continuous2 += 1
-                        arrow.living = False
-                        if continuous2 == 10:
-                            multiply2 += 1
-                        if continuous2 == 25:
-                            multiply2 += 1
-                        if continuous2 == 40:
-                            multiply2 += 1
-                        if continuous2 == 70:
-                            multiply2 += 1
-                        if continuous2 == 100:
-                            multiply2 = 10
-                    elif box.getDist(arrow) > 200:
-                        continuous2 = 0
-                        multiply2 = 1
-
-                    box.active = False
+                        box.active = False
 
         score.update(points)
         multiplier.update(multiply)
@@ -349,13 +349,13 @@ while True:
             if not arrow.available:
                 continuous = 0
                 multiply = 1
-
-        for arrow in arrows2:
-            if not arrow.living:
-                arrows2.remove(arrow)
-            if not arrow.available:
-                continuous2 = 0
-                multiply = 1
+        if player2:
+            for arrow in arrows2:
+                if not arrow.living:
+                    arrows2.remove(arrow)
+                if not arrow.available:
+                    continuous2 = 0
+                    multiply = 1
 
         screen.blit(bgImage, bgRect)
         for box in arrowBoxes.values():
