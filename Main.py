@@ -95,9 +95,10 @@ while True:
 
 #LEVEL SELECT
     if mode == "level select":
-        LevelOneIcon = Button("LevelOne", [53, 60], "Levels/Icons/")
+        LevelOneIcon = Button("LevelOne", [49, 40], "Levels/Icons/")
+        LevelOneInfo = pygame.image.load("Levels/Icons/LevelOneInfo.png").convert()
         playLevel = Button("playLevel", [441, 569])
-        backgroundButton = Button("backgrounds", [450, 450])
+        backgroundButton = Button("backgrounds", [430, 430])
         level = ""
         song = ""
     while mode == "level select":
@@ -142,6 +143,8 @@ while True:
         screen.blit(LevelOneIcon.image, LevelOneIcon.rect)
         screen.blit(playLevel.image, playLevel.rect)
         screen.blit(backgroundButton.image, backgroundButton.rect)
+        if level == "example":
+            screen.blit(LevelOneInfo, (421, 45))
         pygame.display.flip()
         clock.tick(60)
 
