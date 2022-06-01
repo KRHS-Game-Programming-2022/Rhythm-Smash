@@ -101,10 +101,18 @@ while True:
         backgroundButton = Button("backgrounds", [430, 430])
         onePlayButton = Button("OnePlayer", [575, 430])
         twoPlayButton = Button("TwoPlayer", [710, 430])
+
+        smallFont = pygame.font.SysFont('Calibri', 18)
+        playersTEXT = "One Player"
+
         level = ""
         song = ""
+
     while mode == "level select":
         bgImage = pygame.image.load("Screens/Level Select.png").convert()
+
+        playerText = smallFont.render(str(playersTEXT), True, (255, 255, 255))
+        playerTextRect = playerText.get_rect(midtop=[710, 390])
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -137,9 +145,12 @@ while True:
 
                 if onePlayButton.clickUp(event.pos):
                     player2 = False
+                    playersTEXT = "One Player"
 
                 if twoPlayButton.clickUp(event.pos):
                     player2 = True
+                    playersTEXT = "Two Player"
+
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -158,6 +169,8 @@ while True:
         screen.blit(backgroundButton.image, backgroundButton.rect)
         screen.blit(onePlayButton.image, onePlayButton.rect)
         screen.blit(twoPlayButton.image, twoPlayButton.rect)
+        screen.blit(playerText, playerTextRect)
+
         if level == "example":
             screen.blit(LevelOneInfo, (421, 45))
         pygame.display.flip()
