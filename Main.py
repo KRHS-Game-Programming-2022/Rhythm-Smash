@@ -18,6 +18,7 @@ screen = pygame.display.set_mode(size)
 
 mode = "main menu"
 backgroundSelected = "Backgrounds/Background 0.png"
+bgSelected = "Background 1"
 
 
 while True:
@@ -59,7 +60,6 @@ while True:
         screen.blit(creditsButton.image, creditsButton.rect)
         pygame.display.flip()
         clock.tick(60)
-        print()
         # print(clock.get_fps())
 
     score = HUD("Score: ", size, [0, 0])
@@ -105,6 +105,7 @@ while True:
         smallFont = pygame.font.SysFont('Calibri', 18)
         playersTEXT = "One Player"
 
+
         level = ""
         song = ""
 
@@ -112,7 +113,9 @@ while True:
         bgImage = pygame.image.load("Screens/Level Select.png").convert()
 
         playerText = smallFont.render(str(playersTEXT), True, (255, 255, 255))
+        bgText = smallFont.render(str(bgSelected), True, (255, 255, 255))
         playerTextRect = playerText.get_rect(midtop=[710, 390])
+        bgTextRect = bgText.get_rect(midtop=[500, 390])
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -170,6 +173,7 @@ while True:
         screen.blit(onePlayButton.image, onePlayButton.rect)
         screen.blit(twoPlayButton.image, twoPlayButton.rect)
         screen.blit(playerText, playerTextRect)
+        screen.blit(bgText, bgTextRect)
 
         if level == "example":
             screen.blit(LevelOneInfo, (421, 45))
@@ -212,7 +216,7 @@ while True:
                     if button.clickUp(event.pos):
                         i = button.baseText[2:]
                         backgroundSelected = "Backgrounds/Background " + str(i) + ".png"
-                        print(button.baseText, i, backgroundSelected)
+                        bgSelected = ("Background " + str(i))
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
