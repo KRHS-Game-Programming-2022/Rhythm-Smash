@@ -99,6 +99,8 @@ while True:
         LevelOneInfo = pygame.image.load("Levels/Icons/LevelOneInfo.png").convert()
         playLevel = Button("playLevel", [441, 569])
         backgroundButton = Button("backgrounds", [430, 430])
+        onePlayButton = Button("OnePlayer", [575, 430])
+        twoPlayButton = Button("TwoPlayer", [710, 430])
         level = ""
         song = ""
     while mode == "level select":
@@ -111,10 +113,14 @@ while True:
                 LevelOneIcon.hover(event.pos)
                 playLevel.hover(event.pos)
                 backgroundButton.hover(event.pos)
+                onePlayButton.hover(event.pos)
+                twoPlayButton.hover(event.pos)
             if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
                 LevelOneIcon.clickUp(event.pos)
                 playLevel.clickUp(event.pos)
                 backgroundButton.clickUp(event.pos)
+                onePlayButton.clickUp(event.pos)
+                twoPlayButton.clickUp(event.pos)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if LevelOneIcon.clickUp(event.pos):
@@ -128,6 +134,13 @@ while True:
                         playLevel.reset()
                 if backgroundButton.clickUp(event.pos):
                     mode = "background select"
+
+                if onePlayButton.clickUp(event.pos):
+                    player2 = False
+
+                if twoPlayButton.clickUp(event.pos):
+                    player2 = True
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
@@ -143,6 +156,8 @@ while True:
         screen.blit(LevelOneIcon.image, LevelOneIcon.rect)
         screen.blit(playLevel.image, playLevel.rect)
         screen.blit(backgroundButton.image, backgroundButton.rect)
+        screen.blit(onePlayButton.image, onePlayButton.rect)
+        screen.blit(twoPlayButton.image, twoPlayButton.rect)
         if level == "example":
             screen.blit(LevelOneInfo, (421, 45))
         pygame.display.flip()
