@@ -1,4 +1,4 @@
-import pygame, sys, math, random
+import pygame, sys, math, random, os
 from ArrowTile import *
 from ArrowBox import *
 from HUD import*
@@ -17,13 +17,14 @@ screen = pygame.display.set_mode(size)
 
 
 mode = "main menu"
-backgroundSelected = "Backgrounds/Background.png"
+backgroundSelected = "Backgrounds/Background 0.png"
+bgSelected = "Background 1"
 
 
 while True:
 #MAIN MENU
     if mode == "main menu":
-        bgImage = pygame.image.load("Screens/Main Screen.png")
+        bgImage = pygame.image.load("Screens/Main Screen.png").convert()
         bgRect = bgImage.get_rect()
         pygame.mixer.music.load("Levels/Sounds/MB Rythm Smash Final FIX Main Menu Song - 2-16-22 9.30 AM.ogg")
         pygame.mixer.music.play()
@@ -59,33 +60,62 @@ while True:
         screen.blit(creditsButton.image, creditsButton.rect)
         pygame.display.flip()
         clock.tick(60)
-        print()
         # print(clock.get_fps())
 
     score = HUD("Score: ", size, [0, 0])
     multiplier = HUD("Multiplier: ", size, [0, 30])
     streak = HUD("Streak: ", size, [0, 60])
 
+    score2 = HUD("Score: ", size, [850, 0])
+    multiplier2 = HUD("Multiplier: ", size, [850, 30])
+    streak2 = HUD("Streak: ", size, [850, 60])
+
     points = 0
     multiply = 1
     continuous = 0
+
+    points2 = 0
+    multiply2 = 1
+    continuous2 = 0
+
+    player2 = False
 
     arrowBoxes = {"left": ArrowBox("left", [75, 550]),
                   "down": ArrowBox("down", [150, 550]),
                   "up": ArrowBox("up", [225, 550]),
                   "right": ArrowBox("right", [300, 550])}
 
+    arrowBoxes2 = {"left": ArrowBox("left", [900-300, 550]),
+                  "down": ArrowBox("down", [900-225, 550]),
+                  "up": ArrowBox("up", [900-150, 550]),
+                  "right": ArrowBox("right", [900-75, 550])}
+
+
 
 
 #LEVEL SELECT
     if mode == "level select":
-        LevelOneIcon = Button("LevelOne", [53, 60], "Levels/Icons/")
+        LevelOneIcon = Button("LevelOne", [49, 40], "Levels/Icons/")
+        LevelOneInfo = pygame.image.load("Levels/Icons/LevelOneInfo.png").convert()
         playLevel = Button("playLevel", [441, 569])
-        backgroundButton = Button("backgrounds", [450, 450])
+        backgroundButton = Button("backgrounds", [430, 430])
+        onePlayButton = Button("OnePlayer", [575, 430])
+        twoPlayButton = Button("TwoPlayer", [710, 430])
+
+        smallFont = pygame.font.SysFont('Calibri', 18)
+        playersTEXT = "One Player"
+
+
         level = ""
         song = ""
+
     while mode == "level select":
-        bgImage = pygame.image.load("Screens/Level Select.png")
+        bgImage = pygame.image.load("Screens/Level Select.png").convert()
+
+        playerText = smallFont.render(str(playersTEXT), True, (255, 255, 255))
+        bgText = smallFont.render(str(bgSelected), True, (255, 255, 255))
+        playerTextRect = playerText.get_rect(midtop=[710, 390])
+        bgTextRect = bgText.get_rect(midtop=[500, 390])
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -94,10 +124,14 @@ while True:
                 LevelOneIcon.hover(event.pos)
                 playLevel.hover(event.pos)
                 backgroundButton.hover(event.pos)
+                onePlayButton.hover(event.pos)
+                twoPlayButton.hover(event.pos)
             if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
                 LevelOneIcon.clickUp(event.pos)
                 playLevel.clickUp(event.pos)
                 backgroundButton.clickUp(event.pos)
+                onePlayButton.clickUp(event.pos)
+                twoPlayButton.clickUp(event.pos)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if LevelOneIcon.clickUp(event.pos):
@@ -111,6 +145,16 @@ while True:
                         playLevel.reset()
                 if backgroundButton.clickUp(event.pos):
                     mode = "background select"
+
+                if onePlayButton.clickUp(event.pos):
+                    player2 = False
+                    playersTEXT = "One Player"
+
+                if twoPlayButton.clickUp(event.pos):
+                    player2 = True
+                    playersTEXT = "Two Player"
+
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
@@ -126,8 +170,16 @@ while True:
         screen.blit(LevelOneIcon.image, LevelOneIcon.rect)
         screen.blit(playLevel.image, playLevel.rect)
         screen.blit(backgroundButton.image, backgroundButton.rect)
+        screen.blit(onePlayButton.image, onePlayButton.rect)
+        screen.blit(twoPlayButton.image, twoPlayButton.rect)
+        screen.blit(playerText, playerTextRect)
+        screen.blit(bgText, bgTextRect)
+
+        if level == "example":
+            screen.blit(LevelOneInfo, (421, 45))
         pygame.display.flip()
         clock.tick(60)
+
 ### BG Select
     bgButtons = []
     xgap = 0
@@ -144,7 +196,7 @@ while True:
         backButton = Button("back", [50, 600])
 
     while mode == "background select":
-        bgImage = pygame.image.load("Backgrounds/Background 0.png")
+        bgImage = pygame.image.load("Backgrounds/Background 0.png").convert()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -164,7 +216,7 @@ while True:
                     if button.clickUp(event.pos):
                         i = button.baseText[2:]
                         backgroundSelected = "Backgrounds/Background " + str(i) + ".png"
-                        print(button.baseText, i, backgroundSelected)
+                        bgSelected = ("Background " + str(i))
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
@@ -185,37 +237,77 @@ while True:
 #GAME
     if mode == "game":
         print(backgroundSelected)
-        bgImage = pygame.image.load(backgroundSelected)
+        bgImage = pygame.image.load(backgroundSelected).convert()
         pygame.mixer.music.load(song)
         pygame.mixer.music.play()
         arrows = loadLevel(level)
+        if player2:
+            arrows2 = loadLevel(level, 2)
 
     while mode == "game":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+            if not player2:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        mode = "main menu"
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_h:
+                        arrowBoxes["left"].active = True
+                    elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
+                        arrowBoxes["right"].active = True
+                    elif event.key == pygame.K_UP or event.key == pygame.K_k:
+                        arrowBoxes["up"].active = True
+                    elif event.key == pygame.K_DOWN or event.key == pygame.K_j:
+                        arrowBoxes["down"].active = True
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    mode = "main menu"
-                if event.key == pygame.K_LEFT or event.key == pygame.K_h:
-                    arrowBoxes["left"].active = True
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_l:
-                    arrowBoxes["right"].active = True
-                elif event.key == pygame.K_UP or event.key == pygame.K_k:
-                    arrowBoxes["up"].active = True
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_j:
-                    arrowBoxes["down"].active = True
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LEFT:
+                        arrowBoxes["left"].active = False
+                    elif event.key == pygame.K_RIGHT:
+                        arrowBoxes["right"].active = False
+                    elif event.key == pygame.K_UP:
+                        arrowBoxes["up"].active = False
+                    elif event.key == pygame.K_DOWN:
+                        arrowBoxes["down"].active = False
+            if player2:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        mode = "main menu"
+                    if event.key == pygame.K_h:
+                        arrowBoxes2["left"].active = True
+                    elif event.key == pygame.K_LEFT:
+                        arrowBoxes["left"].active = True
+                    elif event.key == pygame.K_l:
+                        arrowBoxes2["right"].active = True
+                    elif event.key == pygame.K_RIGHT:
+                        arrowBoxes["right"].active = True
+                    elif event.key == pygame.K_k:
+                        arrowBoxes2["up"].active = True
+                    elif event.key == pygame.K_UP:
+                        arrowBoxes["up"].active = True
+                    elif event.key == pygame.K_j:
+                        arrowBoxes2["down"].active = True
+                    elif event.key == pygame.K_DOWN:
+                        arrowBoxes["down"].active = True
 
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT:
-                    arrowBoxes["left"].active = False
-                elif event.key == pygame.K_RIGHT:
-                    arrowBoxes["right"].active = False
-                elif event.key == pygame.K_UP:
-                    arrowBoxes["up"].active = False
-                elif event.key == pygame.K_DOWN:
-                    arrowBoxes["down"].active = False
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_h:
+                        arrowBoxes2["left"].active = False
+                    elif event.key == pygame.K_LEFT:
+                        arrowBoxes["left"].active = False
+                    elif event.key == pygame.K_l:
+                        arrowBoxes2["right"].active = False
+                    elif event.key == pygame.K_RIGHT:
+                        arrowBoxes["right"].active = False
+                    elif event.key == pygame.K_k:
+                        arrowBoxes2["up"].active = False
+                    elif event.key == pygame.K_UP:
+                        arrowBoxes["up"].active = False
+                    elif event.key == pygame.K_j:
+                        arrowBoxes2["down"].active = False
+                    elif event.key == pygame.K_DOWN:
+                        arrowBoxes["down"].active = False
         """
         if random.randint(0, 60) == 0:
             kinds = ["left", "down", "up", "right"]
@@ -248,10 +340,39 @@ while True:
                         multiply = 1
 
                     box.active = False
+        if player2:
+            for arrow in arrows2:
+                arrow.move()
+                arrow.wallCollide(size)
+                for box in arrowBoxes2.values():
+                    if box.kind == arrow.kind and box.active:
+                        if box.getDist(arrow) < 200:
+                            points2 += 200 - (box.getDist(arrow) * int(multiply))
+                            continuous2 += 1
+                            arrow.living = False
+                            if continuous2 == 10:
+                                multiply2 += 1
+                            if continuous2 == 25:
+                                multiply2 += 1
+                            if continuous2 == 40:
+                                multiply2 += 1
+                            if continuous2 == 70:
+                                multiply2 += 1
+                            if continuous2 == 100:
+                                multiply2 = 10
+                        elif box.getDist(arrow) > 200:
+                            continuous2 = 0
+                            multiply2 = 1
+
+                        box.active = False
 
         score.update(points)
         multiplier.update(multiply)
         streak.update(continuous)
+
+        score2.update(points2)
+        multiplier2.update(multiply2)
+        streak2.update(continuous2)
 
         for arrow in arrows:
             if not arrow.living:
@@ -263,12 +384,29 @@ while True:
             if not arrow.available:
                 continuous = 0
                 multiply = 1
+        if player2:
+            for arrow in arrows2:
+                if not arrow.living:
+                    arrows2.remove(arrow)
+                if not arrow.available:
+                    continuous2 = 0
+                    multiply = 1
 
         screen.blit(bgImage, bgRect)
         for box in arrowBoxes.values():
             screen.blit(box.image, box.rect)
         for arrow in arrows:
             screen.blit(arrow.image, arrow.rect)
+
+        if player2:
+            for box in arrowBoxes2.values():
+                screen.blit(box.image, box.rect)
+            for arrow in arrows2:
+                screen.blit(arrow.image, arrow.rect)
+            screen.blit(score2.image, score2.rect)
+            screen.blit(multiplier2.image, multiplier2.rect)
+            screen.blit(streak2.image, streak2.rect)
+
         screen.blit(score.image, score.rect)
         screen.blit(multiplier.image, multiplier.rect)
         screen.blit(streak.image, streak.rect)
@@ -283,7 +421,7 @@ while True:
         scores = loadScores(level)
         smallFont = pygame.font.SysFont('Calibri', 40)
 
-        scores += [points]
+        scores += [points, points2]
         scores.sort(reverse = True)
         scores = scores[0:10]
 
@@ -293,8 +431,22 @@ while True:
         highText = smallFont.render(str(scores[0]), True, (255, 255, 255))
         scoretextRect = scoreText.get_rect(midtop=[435, 130])
         highTextRect = highText.get_rect(midtop=[435, 375])
+
+        if player2:
+            scoreText = smallFont.render(str(points), True, (255, 255, 255))
+            highText = smallFont.render(str(scores[0]), True, (255, 255, 255))
+            scoretextRect = scoreText.get_rect(midtop=[200, 130])
+            highTextRect = highText.get_rect(midtop=[450, 475])
+
+            scoreText2 = smallFont.render(str(points2), True, (255, 255, 255))
+            scoretextRect2 = scoreText.get_rect(midtop=[680, 130])
+
+        nextButton = Button("next", [650,600])
     while mode == "end level":
-        bgImage = pygame.image.load("Screens/End Level Screen.png")
+        bgImage = pygame.image.load("Screens/End Level Screen.png").convert()
+
+        if player2:
+            bgImage = pygame.image.load("Screens/2Player End Level Screen.png").convert()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -302,18 +454,27 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if 684 <= mouse[0] <= 684 + 150 and 588 <= mouse[1] <= 588 + 48:
+            if event.type == pygame.MOUSEMOTION:
+                nextButton.hover(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
+                nextButton.clickDown(event.pos)
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if nextButton.clickUp(event.pos):
                     mode = "highscores"
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
         screen.blit(scoreText, scoretextRect)
         screen.blit(highText, highTextRect)
+        if player2:
+            screen.blit(scoreText2, scoretextRect2)
+        screen.blit(nextButton.image, nextButton.rect)
         pygame.display.flip()
         clock.tick(60)
 #HIGHSCORES
     if mode == "highscores":
+        levelselectButton = Button("levelselect", [50, 625])
         smallFont = pygame.font.SysFont('Consolas', 38)
         renderList = []
         y = 135
@@ -328,7 +489,7 @@ while True:
             listItem = [highText, highTextRect]
             renderList += [listItem]
     while mode == "highscores":
-        bgImage = pygame.image.load("Screens/Highscores.png")
+        bgImage = pygame.image.load("Screens/Highscores.png").convert()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -336,20 +497,26 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     mode = "main menu"
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if 34 <= mouse[0] <= 34 + 182 and 588 <= mouse[1] <= 616 + 51:
+            if event.type == pygame.MOUSEMOTION:
+                levelselectButton.hover(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:  # BUTTONS!!!
+                levelselectButton.clickDown(event.pos)
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if levelselectButton.clickUp(event.pos):
                     mode = "level select"
 
         mouse = pygame.mouse.get_pos()
         screen.blit(bgImage, bgRect)
         for item in renderList:
             screen.blit(item[0], item[1])
+        screen.blit(levelselectButton.image, levelselectButton.rect)
         pygame.display.flip()
         clock.tick(60)
 ### CREDITS
     if mode == "credits":
         mainmenuButton = Button("main menu", [59, 562])
-        bgImage = pygame.image.load("Screens/Credits.png")
+        bgImage = pygame.image.load("Screens/Credits.png").convert()
     while mode == "credits":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -367,3 +534,4 @@ while True:
         screen.blit(mainmenuButton.image, mainmenuButton.rect)
         pygame.display.flip()
         clock.tick(60)
+

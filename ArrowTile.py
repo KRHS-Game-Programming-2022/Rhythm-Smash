@@ -4,7 +4,7 @@ import pygame, sys, math
 class ArrowTile():
     def __init__(self, kind, speed=[0, 10], startPos=[0, 0]):
         self.kind = kind
-        self.image = pygame.image.load("Arrows/ArrowTiles/Images/" + self.kind + "Arrow.png")
+        self.image = pygame.image.load("Arrows/ArrowTiles/Images/" + self.kind + "Arrow.png").convert_alpha()
         self.rect = self.image.get_rect(center=startPos)
         self.speedx = speed[0]
         self.speedy = speed[1]
@@ -18,10 +18,14 @@ class ArrowTile():
         self.speed = [self.speedx, self.speedy]
         self.rect = self.rect.move(self.speed)
 
+    def __str__(self):
+        out = self.kind + " arrow, speed: " + str(self.speedy)
+        return out
+
     def wallCollide(self, size):
         width = size[0]
         height = size[1]
-        if self.rect.bottom > height:
+        if self.rect.top > height:
             self.living = False
             self.available = False
 
