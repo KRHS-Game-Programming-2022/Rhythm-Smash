@@ -31,6 +31,8 @@ while True:
         playButton = Button("play", [353, 543])
         quitButton = Button("quit", [710, 562])
         creditsButton = Button("credits", [59, 562])
+        controlsButton = Button("controls", [67, 615])
+
     while mode == "main menu":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -39,10 +41,12 @@ while True:
                 playButton.hover(event.pos)
                 quitButton.hover(event.pos)
                 creditsButton.hover(event.pos)
+                controlsButton.hover(event.pos)
             if event.type == pygame.MOUSEBUTTONDOWN:           #BUTTONS!!!
                 playButton.clickDown(event.pos)
                 quitButton.clickDown(event.pos)
                 creditsButton.clickDown(event.pos)
+                controlsButton.clickDown(event.pos)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if playButton.clickUp(event.pos):
@@ -51,6 +55,8 @@ while True:
                     sys.exit()
                 if creditsButton.clickUp(event.pos):
                     mode = "credits"
+                if controlsButton.clickUp(event.pos):
+                    mode = "controls"
 
         mouse = pygame.mouse.get_pos()
         screen.fill((255, 128, 64))
@@ -58,6 +64,7 @@ while True:
         screen.blit(playButton.image, playButton.rect)
         screen.blit(quitButton.image, quitButton.rect)
         screen.blit(creditsButton.image, creditsButton.rect)
+        screen.blit(controlsButton.image, controlsButton.rect)
         pygame.display.flip()
         clock.tick(60)
         # print(clock.get_fps())
@@ -92,6 +99,27 @@ while True:
 
 
 
+    if mode == "controls":
+        mainmenuButton = Button("main menu", [59, 562])
+
+    while mode == "controls":
+        bgImage = pygame.image.load("Screens/Controls.png").convert()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEMOTION:
+                mainmenuButton.hover(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN:  # BUTTONS!!!
+                mainmenuButton.clickDown(event.pos)
+            if event.type == pygame.MOUSEBUTTONUP:
+                if mainmenuButton.clickUp(event.pos):
+                    mode = "main menu"
+
+        screen.blit(bgImage, bgRect)
+        screen.blit(mainmenuButton.image, mainmenuButton.rect)
+        pygame.display.flip()
+        clock.tick(60)
 
 #LEVEL SELECT
     if mode == "level select":
@@ -104,7 +132,6 @@ while True:
 
         smallFont = pygame.font.SysFont('Calibri', 18)
         playersTEXT = "One Player"
-
 
         level = ""
         song = ""
